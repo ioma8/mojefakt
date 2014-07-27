@@ -61,6 +61,10 @@
             <div class="col-sm-8"><input type="text" name="varsym" id="varsym" value="" placeholder="variabilní symbol" class="form-control"/></div>
           </div>
           <div class="form-group">
+            <label class="control-label col-sm-2" for="bankzprava">Zpráva:</label>
+            <div class="col-sm-8"><input type="text" name="bankzprava" id="bankzprava" value="" placeholder="zpráva pro příjemce" class="form-control"/></div>
+          </div>
+          <div class="form-group">
             <label class="control-label col-sm-2" for="odberatel">Odběratel:</label>
             <div class="col-sm-8">
               <textarea name="odberatel" id="odberatel" value="" placeholder="odběratel" class="form-control" rows="4"/></textarea>

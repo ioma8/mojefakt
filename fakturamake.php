@@ -12,9 +12,9 @@ if (isset($_REQUEST['polozkaKs']))
 	}
 }
 //$polozky[1]=array('1 ks','Progamátorské práce na webu značkomanie.cz','6 000,00 CZK','6 000,00 CZK');
-makeFaktura(getRequest('cislofak'),getRequest('vystaveni'),getRequest('splatnost'),getRequest('varsym'),getRequest('odberatel'),getRequest('odbic'),$polozky,getRequest('cenacelkem'),$mena,getRequest('stahnout'),getRequest('ulozit'));
+makeFaktura(getRequest('cislofak'),getRequest('vystaveni'),getRequest('splatnost'),getRequest('varsym'),getRequest('odberatel'),getRequest('odbic'),$polozky,getRequest('cenacelkem'),$mena,getRequest('stahnout'),getRequest('ulozit'),getRequest('bankzprava'));
 
-function makeFaktura($cisloFaktury,$datumVystaveni,$datumSplatnosti,$variabilniSymbol,$odberatel,$icOdberatele='',$polozky,$cenaCelkem,$mena,$stahnout,$ulozit)
+function makeFaktura($cisloFaktury,$datumVystaveni,$datumSplatnosti,$variabilniSymbol,$odberatel,$icOdberatele='',$polozky,$cenaCelkem,$mena,$stahnout,$ulozit,$bankzprava='')
 {
 	$pdf = new FPDF();
 	$pdf->AddPage();
@@ -80,6 +80,14 @@ function makeFaktura($cisloFaktury,$datumVystaveni,$datumSplatnosti,$variabilniS
 	$pdf->SetFont('ls','b',12);
 	$pdf->Cell(140,6,cesky('Celkem k úhradě:'),0,0,'R',true);
 	$pdf->Cell(0,6,getCena($cenaCelkem,$mena),0,1,'R',true);
+
+	$celkemcena_qr=number_format((float)$cenaCelkem,2,'.','');
+	$qr_url='http://api.paylibo.com/paylibo/generator/czech/image?accountNumber=221373126&bankCode=0300&amount='.$celkemcena_qr.'&currency='.$mena.'&vs='.$variabilniSymbol.'&message='.urlencode($bankzprava).'&size=200';
+	$qr_fname='qr_code.png';
+	
+	copy($qr_url, $qr_fname);
+
+	$pdf->Image($qr_fname,10,10,40,40);
 
 	$pdf->SetY(-15);
 	$pdf->SetFont('ls','b',8);
